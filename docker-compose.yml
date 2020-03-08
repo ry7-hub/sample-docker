@@ -15,6 +15,9 @@ services:
     <<: *app_base
     ports:
       - "3000:3000" # localhost:3000にポートをマッピングする
+    networks:
+      sample-network:
+        ipv4_address: 172.30.0.4
     command: yarn dev # upする際に実行されるコマンド
   db:
     image: postgres:11
