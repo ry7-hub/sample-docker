@@ -9,6 +9,8 @@ services:
     environment:
       PORT: 3000
       HOST: 0.0.0.0
+    networks:
+      - sample-network
     restart: always # エラーなどでコンテナが落ちた際に自動で再起動してくれる
 
   workspace:
@@ -16,8 +18,7 @@ services:
     ports:
       - "3000:3000" # localhost:3000にポートをマッピングする
     networks:
-      sample-network:
-        ipv4_address: 172.30.0.4
+      - sample-network
     command: yarn dev # upする際に実行されるコマンド
   db:
     image: postgres:11
