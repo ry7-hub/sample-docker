@@ -1,0 +1,55 @@
+version: '3'
+services:
+  node: &app_base
+    image: node:12 # dockerhubにすでに上がっている
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ../sample-front:/var/www
+    environment:
+      PORT: 3000
+      HOST: 0.0.0.0
+    restart: always # エラーなどでコンテナが落ちた際に自動で再起動してくれる
+  workspace:
+    <<: *app_base
+    ports:
+      - "3000:3000" # localhost:3000にポートをマッピングする
+    networks:
+      sample-network:
+        ipv4_address: 172.30.0.4
+    command: yarn dev # upする際に実行されるコマンド
+  db:
+    image: postgres:11
+    container_name: postgres
+    # postgresの環境変数
+    env_file: ../sample-api/env/env_postgres
+    ports:
+      - 5432:5432
+    networks:
+      sample-network:
+        ipv4_address: 172.30.0.3
+    volumes:
+      # 起動スクリプト
+      - ../sample-api/initdb:/docker-entrypoint-initdb.d
+  app:
+    image: openjdk:8-jdk-alpine
+    depends_on:
+      # dbが起動してからappを起動
+      - db
+    ports:
+      - "8081:8081"
+    networks:
+      sample-network:
+        ipv4_address: 172.30.0.2
+    volumes:
+      - ../sample-api:/app
+    working_dir: /app
+    tty: true
+    command: ./mvnw spring-boot:run
+networks:
+  sample-network:
+    driver: bridge
+    ipam:
+     driver: default
+     config:
+       - subnet: 172.30.0.0/24
