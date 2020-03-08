@@ -2,16 +2,15 @@
 
 以下のように各プロジェクトを配置
 
-任意のディレクトリ
+      任意のディレクトリ
 
-      |- sample-docker
+           |- sample-docker
       
-      |- sample-front
+           |- sample-front
       
-      |- sample-api
+           |- sample-api
 
 
+sample-docker直下で以下を実行し、フロント、APIサーバ、DBが起動
 
 docker-compose up -d
-
-フロント、APIサーバ、DBが起動
