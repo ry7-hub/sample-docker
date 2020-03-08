@@ -1,18 +1,21 @@
 version: '3'
 services:
-  front: &app_base
+  node: &app_base
     image: node:12 # dockerhubにすでに上がっている
     tty: true
     working_dir: /var/www
     volumes:
-      - ../sample-front:/var/www
+      - ../sample-front:/var/www # /sample-frontをコンテナ内の/var/wwwにマウントする
+    environment:
+      PORT: 3000
+      HOST: 0.0.0.0
     restart: always # エラーなどでコンテナが落ちた際に自動で再起動してくれる
+
+  workspace:
+    <<: *app_base
     ports:
-        - "3000:3000" # localhost:3000にポートをマッピングする
-    networks:
-      sample-network:
-        ipv4_address: 172.30.0.4
-    command: bash -c "npm install"
+      - "3000:3000" # localhost:3000にポートをマッピングする
+    command: yarn dev # upする際に実行されるコマンド
   db:
     image: postgres:11
     container_name: postgres
