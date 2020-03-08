@@ -12,7 +12,9 @@ services:
     networks:
       sample-network:
         ipv4_address: 172.30.0.4
-    command: yarn dev # upする際に実行されるコマンド    
+    command: >
+      npm install &&
+      npm run dev
   db:
     image: postgres:11
     container_name: postgres
