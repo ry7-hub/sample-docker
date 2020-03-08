@@ -9,10 +9,10 @@ services:
     restart: always # エラーなどでコンテナが落ちた際に自動で再起動してくれる
     ports:
         - "3000:3000" # localhost:3000にポートをマッピングする
-      networks:
-        sample-network:
-          ipv4_address: 172.30.0.4
-      command: yarn dev # upする際に実行されるコマンド    
+    networks:
+      sample-network:
+        ipv4_address: 172.30.0.4
+    command: yarn dev # upする際に実行されるコマンド    
   db:
     image: postgres:11
     container_name: postgres
